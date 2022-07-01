@@ -4,7 +4,7 @@ public class Seller {
     private final int SELL_CAR_TIME = 1000;
     private final int PRODUCTION_TIME = 3000;
 
-    private CarShowroom carShowroom;
+    private final CarShowroom carShowroom;
 
     public Seller(CarShowroom carShowroom) {
         this.carShowroom = carShowroom;
