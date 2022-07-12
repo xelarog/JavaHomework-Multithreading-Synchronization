@@ -8,34 +8,23 @@ public class Main {
         final int delay1 = 1000;
         final int delay3 = 3000;
         final int carLimit = 10;
+        final String[] buyerNames = {"Покупатель 1", "Покупатель 2", "Покупатель 3"};
 
         final CarShowroom carShowroom = new CarShowroom(carLimit);
 
-        Thread buyer1 = null;
-        Thread buyer2 = null;
-        Thread buyer3 = null;
+        Thread[] buyers = {null, null, null};
         Thread producer;
 
-        boolean canBuy1 = true;
-        boolean canBuy2 = true;
-        boolean canBuy3 = true;
+        boolean[] canBuy = {true, true, true};
         int productionCount = 0;
 
         while (carShowroom.getCarSoldCount() < carLimit) {
-            if (canBuy1) {
-                buyer1 = new Thread(null, carShowroom::sellCar, "Покупатель 1");
-                buyer1.start();
-                canBuy1 = false;
-            }
-            if (canBuy2) {
-                buyer2 = new Thread(null, carShowroom::sellCar, "Покупатель 2");
-                buyer2.start();
-                canBuy2 = false;
-            }
-            if (canBuy3) {
-                buyer3 = new Thread(null, carShowroom::sellCar, "Покупатель 3");
-                buyer3.start();
-                canBuy3 = false;
+            for (int i = 0; i < canBuy.length; i++) {
+                if (canBuy[i]) {
+                    buyers[i] = new Thread(null, carShowroom::sellCar, buyerNames[i]);
+                    buyers[i].start();
+                    canBuy[i] = false;
+                }
             }
             Thread.sleep(delay1);
 
@@ -46,19 +35,17 @@ public class Main {
             }
             Thread.sleep(delay3);
 
-            if (!buyer1.isAlive())
-                canBuy1 = true;
-            if (!buyer2.isAlive())
-                canBuy2 = true;
-            if (!buyer3.isAlive())
-                canBuy3 = true;
-
+            for (int i = 0; i < buyers.length; i++) {
+                if (!buyers[i].isAlive())
+                    canBuy[i] = true;
+            }
         }
         System.out.println("Все машины проданы, поставок не ожидается.");
 
-        while (buyer1.isAlive() || buyer2.isAlive() || buyer3.isAlive()) {
-            carShowroom.noMoreCars();
+        for (Thread buyer : buyers) {
+            if (buyer.isAlive())
+                carShowroom.noMoreCars();
         }
-
     }
 }
+

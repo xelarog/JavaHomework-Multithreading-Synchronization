@@ -44,7 +44,7 @@ public class Seller {
     }
 
     public synchronized void endCarsNotify() {
-        notifyAll();
+        notify();
     }
 }
 
