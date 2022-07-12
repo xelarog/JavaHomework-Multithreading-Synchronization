@@ -55,7 +55,7 @@ public class Seller {
 
     public void endCarsNotify() {
         lock.lock();
-        carCondition.signalAll();
+        carCondition.signal();
         lock.unlock();
     }
 }
