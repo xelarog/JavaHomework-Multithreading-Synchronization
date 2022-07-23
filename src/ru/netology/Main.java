@@ -3,14 +3,14 @@ package ru.netology;
 
 public class Main {
 
+    private static final int DELAY_1 = 1000;
+    private static final int DELAY_3 = 3000;
+    private static final int CAR_LIMIT = 10;
+
     public static void main(String[] args) throws InterruptedException {
 
-        final int delay1 = 1000;
-        final int delay3 = 3000;
-        final int carLimit = 10;
         final String[] buyerNames = {"Покупатель 1", "Покупатель 2", "Покупатель 3"};
-
-        final CarShowroom carShowroom = new CarShowroom(carLimit);
+        final CarShowroom carShowroom = new CarShowroom(CAR_LIMIT);
 
         Thread[] buyers = {null, null, null};
         Thread producer;
@@ -18,7 +18,7 @@ public class Main {
         boolean[] canBuy = {true, true, true};
         int productionCount = 0;
 
-        while (carShowroom.getCarSoldCount() < carLimit) {
+        while (carShowroom.getCarSoldCount() < CAR_LIMIT) {
             for (int i = 0; i < canBuy.length; i++) {
                 if (canBuy[i]) {
                     buyers[i] = new Thread(null, carShowroom::sellCar, buyerNames[i]);
@@ -26,14 +26,14 @@ public class Main {
                     canBuy[i] = false;
                 }
             }
-            Thread.sleep(delay1);
+            Thread.sleep(DELAY_1);
 
-            if (productionCount < carLimit) {
+            if (productionCount < CAR_LIMIT) {
                 producer = new Thread(null, carShowroom::acceptCar, "Производитель");
                 producer.start();
                 productionCount++;
             }
-            Thread.sleep(delay3);
+            Thread.sleep(DELAY_3);
 
             for (int i = 0; i < buyers.length; i++) {
                 if (!buyers[i].isAlive())
